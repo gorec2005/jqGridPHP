@@ -1194,7 +1194,9 @@ abstract class jqGrid
             $params[$k] = $v;
         }
 
-        return $this->base_url . '?' . http_build_query($params);
+        return $this->base_url . (
+            false === strpos($this->base_url, '?') ? '?' : '&'
+            ) . http_build_query($params);
     }
 
     /**
