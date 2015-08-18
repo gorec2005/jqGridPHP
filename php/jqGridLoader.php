@@ -71,6 +71,14 @@ class jqGridLoader
             {
                 return $e;
             }
+        } catch (Exception $e) {
+            if (isset($grid)) {
+                #Catch exception and send a HTTP error 403
+                return $grid->catchError($e);
+            } else { 
+                #Loader exception
+                return $e;
+            }
         }
     }
 

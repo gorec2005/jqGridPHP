@@ -424,7 +424,7 @@ abstract class jqGrid
     }
 
     /**
-     * All exceptions comes here
+     * All `jqGrid_Exception` exceptions comes here
      * Override this method for custom exception handling
      *
      * @param jqGrid_Exception $e
@@ -464,6 +464,30 @@ abstract class jqGrid
                 break;
         }
 
+        return $e;
+    }
+    /**
+     * All exceptions except `jqGrid_Exception` comes here, it is unexpected 
+     *      failure so causing send a 500 HTTP error.
+     *
+     * Override this method for custom exception handling.
+     *
+     * @param Exception $e
+     * @return mixed
+     */
+    public function catchError(Exception $e) {
+        #More output types will be added
+        $r = array(
+            'error' => 1,
+            'error_msg' => $e->getMessage(),
+            'error_code' => $e->getCode()
+        );
+        if($this->Loader->get('debug_output')) {
+            $r['error_string'] = (string)$e;
+        }
+        header('HTTP/1.1 500 ' . $r['error_msg']);
+        $this->json($r);
+        
         return $e;
     }
 
