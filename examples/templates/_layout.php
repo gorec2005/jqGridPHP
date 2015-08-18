@@ -19,8 +19,8 @@
     <script src="/jqgrid/js/jquery.jqGrid.min.js"></script>
 
     <!--jqGrid Extension-->
-    <link href="/client/jqgrid-ext.css" rel="stylesheet" type="text/css"/>
-    <script src="/client/jqgrid-ext.js"></script>
+    <link href="../client/jqgrid-ext.css" rel="stylesheet" type="text/css"/>
+    <script src="../client/jqgrid-ext.js"></script>
 
     <!-- Other plugins -->
     <script src="http://yandex.st/jquery/form/2.67/jquery.form.min.js"></script>
