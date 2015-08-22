@@ -1207,6 +1207,11 @@ abstract class jqGrid
      */
     protected function renderComplete($data)
     {
+        $pager_bot = $data['pager_id'];
+        $pager_top = null;
+        if (isset($data['options']['toppager']) && $data['options']['toppager']) {
+            $pager_top = $data['id'] . "_toppager";
+        }
         $data['extend'] = $data['extend'] ? $data['extend'] : '{}'; //prevent errors on empty 'extend'
 
         $code = $data['html'] . '
@@ -1225,7 +1230,7 @@ $grid.jqGrid($.extend(' . jqGrid_Utils::jsonEncode($data['options']) . ', typeof
         if(isset($data['nav']))
         {
             $nav_special = array('prmEdit', 'prmAdd', 'prmDel', 'prmSearch', 'prmView');
-            $code .= "\$grid.jqGrid('navGrid', pager, " . jqGrid_Utils::jsonEncode(array_diff_key($data['nav'], array_flip($nav_special)));
+            $code .= "\$grid.jqGrid('navGrid', '#{$pager_bot}', " . jqGrid_Utils::jsonEncode(array_diff_key($data['nav'], array_flip($nav_special)));
 
             #Respect the argument order
             foreach($nav_special as $k)
@@ -1251,9 +1256,8 @@ $grid.jqGrid($.extend(' . jqGrid_Utils::jsonEncode($data['options']) . ', typeof
                 } else {
                     $excel_title = '"Excel"';
                     $excel_caption = '""';
-                }              
-                $code .= "
-                \$grid.jqGrid('navButtonAdd', pager, {
+                }
+                $codeObj = "{
                     title: {$excel_title},
                     caption: {$excel_caption},
                     icon: 'ui-extlink',
@@ -1261,7 +1265,15 @@ $grid.jqGrid($.extend(' . jqGrid_Utils::jsonEncode($data['options']) . ', typeof
                         \$(this).jqGrid('extExport',
                             {'export' : 'ExcelHtml', 'rows': -1});
                     }
-                });\n";
+                }";
+                $code .= "\$grid.jqGrid('navButtonAdd', '#{$pager_bot}',
+                    {$codeObj});\n";
+                if ($pager_top &&
+                        isset($data['nav']['cloneToTop']) &&
+                        $data['nav']['cloneToTop']) {
+                    $code .= "\$grid.jqGrid('navButtonAdd', '#{$pager_top}',
+                        {$codeObj});\n";
+                }
             }
         }
 
