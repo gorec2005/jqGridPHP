@@ -1260,8 +1260,11 @@ abstract class jqGrid
     {
         $pager_bot = $data['pager_id'];
         $pager_top = null;
+        $pager_cloneToTop = false;
         if (isset($data['options']['toppager']) && $data['options']['toppager']) {
             $pager_top = $data['id'] . "_toppager";
+            $pager_cloneToTop = isset($data['nav']['cloneToTop']) ?
+                        $data['nav']['cloneToTop'] : false;
         }
         $data['extend'] = $data['extend'] ? $data['extend'] : '{}'; //prevent errors on empty 'extend'
 
@@ -1300,31 +1303,28 @@ $grid.jqGrid($.extend(' . jqGrid_Utils::jsonEncode($data['options']) . ', typeof
             $code .= "\n);\n";
 
             #Excel button
-            if(isset($data['nav']['excel']) and $data['nav']['excel'])
-            {
-                if (isset($data['nav']['exceltext'])) {
-                    $excel_title = jqGrid_Utils::jsonEncode($data['nav']['exceltext']);
-                    $excel_caption = $excel_title;
-                } else {
-                    $excel_title = '"Excel"';
-                    $excel_caption = '""';
-                }
-                $codeObj = "{
-                    title: {$excel_title},
-                    caption: {$excel_caption},
-                    icon: 'ui-extlink',
-                    onClickButton: function(){
+            if(isset($data['nav']['excel']) and $data['nav']['excel']) {
+                $styleUI = isset($data['options']['styleUI']) ? 
+                    $data['options']['styleUI'] : "";
+                $excelBtOptions = array(
+                    'title' => 'Excel',
+                    'caption' => '',
+                    'buttonicon' => ($styleUI === 'Bootstrap' ?
+                        'glyphicon-export' : 'ui-icon-extlink'),
+                    'onClickButton' => "<?js function(){
                         \$(this).jqGrid('extExport',
-                            {'export' : 'ExcelHtml', 'rows': -1});
-                    }
-                }";
-                $code .= "\$grid.jqGrid('navButtonAdd', '#{$pager_bot}',
-                    {$codeObj});\n";
-                if ($pager_top &&
-                        isset($data['nav']['cloneToTop']) &&
-                        $data['nav']['cloneToTop']) {
-                    $code .= "\$grid.jqGrid('navButtonAdd', '#{$pager_top}',
-                        {$codeObj});\n";
+                            {'export': 'ExcelHtml', 'rows': -1});
+                    }?>"
+                );
+                if (isset($data['nav']['exceltext'])) {
+                    $excelBtOptions['title'] = $data['nav']['exceltext'];
+                    $excelBtOptions['caption'] = $excelBtOptions['title'];
+                }
+                $code .= "\$grid.jqGrid('navButtonAdd', '#{$pager_bot}', "
+                    . jqGrid_Utils::jsonEncode($excelBtOptions) . ");\n";
+                if ($pager_cloneToTop) {
+                    $code .= "\$grid.jqGrid('navButtonAdd', '#{$pager_top}', "
+                        . jqGrid_Utils::jsonEncode($excelBtOptions) . ");\n";
                 }
             }
         }

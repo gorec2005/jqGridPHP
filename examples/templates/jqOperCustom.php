@@ -6,7 +6,7 @@
         {
             caption:"Change price",
             title:"Custom oper",
-            icon:"ui-icon-flag",
+            buttonicon:"ui-icon-flag",
             onClickButton:function () {
                 var price = prompt("Enter new price.\Number between 1 and 3000");
                 if (!price) return;

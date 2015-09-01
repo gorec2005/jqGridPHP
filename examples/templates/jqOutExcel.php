@@ -7,7 +7,7 @@
         {
             caption:"Excel some rows",
             title:"Excel",
-            icon:"ui-extlink",
+            buttonicon:"ui-icon-extlink",
             onClickButton:function () {
                 var rows = prompt("How many rows to export?");
                 if (!rows) return;
