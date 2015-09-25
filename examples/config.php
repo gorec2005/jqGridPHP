@@ -1,6 +1,4 @@
 <?php
-$lang = 'ru';
-
 $_CONFIG = array(
     'root_path' => dirname(__FILE__) . '/../php/',
 
