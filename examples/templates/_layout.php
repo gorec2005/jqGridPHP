@@ -52,7 +52,7 @@
         $.jgrid.edit.closeAfterAdd = true;
 
         $(function () {
-            $('#tabs-info').html($('#descr_rus').html());
+            $('#tabs-info').html($('<?=$lang_info?>').html());
 
             $('#accordion').accordion({
                 'animated':false,

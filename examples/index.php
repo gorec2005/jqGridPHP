@@ -1,5 +1,20 @@
 <?php
 require 'config.php';
+// Set lang
+$lang = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : 'ru';
+switch ($lang) {
+    case 'en':
+        $lang_info = '#descr';
+        break;
+    case 'ru':
+        $lang_info = '#descr_rus';
+        break;
+    default:
+        $lang = 'en';
+        $lang_info = '#descr';
+        break;
+}
+
 require 'sections.php';
 
 header("Content-Type: text/html; charset={$_CONFIG['encoding']};");
